@@ -9,6 +9,7 @@ var gerarLogger = logger.logger();
 var porta = 3000;
 app.set('porta', porta);
 
+console.log(app.use('porta'));
 
 var server = http.createServer(app);
 
