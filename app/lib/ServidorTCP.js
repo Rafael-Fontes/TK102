@@ -8,24 +8,19 @@
  
  */
 
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var app = require('http').createServer();
+var io = require('socket.io')(app);
 
-app.get('/', function (req, res)
+exports.ServidorTCP = function ()
 {
-    console.log("Página index");
-});
-
-io.on('connection', function (socket)
-{
-    socket.on('chat message', function (msg)
+    io.on('connection', function (socket)
     {
-        io.emit('chat message', msg);
+        socket.emit('news', {hello: 'world'});
+        socket.on('my other event', function (data)
+        {
+            console.log(data);
+        });
     });
-});
-
-http.listen(3000, function ()
-{
-    console.log('listening on *:3000');
-});
+    
+    return io;
+};
