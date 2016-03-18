@@ -32,11 +32,14 @@ exports.Socket = function()
     //Tratamento de erros
     servidor.on('error', function(erro)
     {
+        console.log(erro);
         if (erro.code === 'EADDRINUSE') 
         {
             console.log('Endereço em uso, aguardando para tentar novamente...');
-            gerarLogger.info({'oiii' : 'ooiiiiiiiii'});
-            servidor.close();
+            gerarLogger.warn({
+                'message' : 'Endereço em uso: ' +erro.address +':'+ erro.port
+            });
+           // servidor.close();
         }
     });
     
