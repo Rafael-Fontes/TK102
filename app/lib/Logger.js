@@ -11,6 +11,7 @@
 
 
 var winston = require('winston');
+var util    = require('./Util');
 
 exports.logger = function ()
 {
@@ -23,7 +24,7 @@ exports.logger = function ()
             new (winston.transports.File)
             ({
                 name    : 'info-file',
-                filename: './app/data/logger/loggers-info.log',
+                filename: './data/logger/loggers-info.log',
                 level   : 'info',
                 json    : true,
                 maxsize : 10485760, //10MB
@@ -54,10 +55,10 @@ exports.logger = function ()
         [
             new winston.transports.File
             ({
-                name    : ' exception-file',
-                filename: './data/logger/exceptions.log',
-                exitOnError: false ,
-                handleExceptions: true,
+                name                           : ' exception-file',
+                filename                       : './data/logger/exceptions.log',
+                exitOnError                    : false ,
+                handleExceptions               : true,
                 humanReadableUnhandledException: true
             })
         ]
