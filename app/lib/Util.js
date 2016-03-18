@@ -7,6 +7,7 @@ var validator = new Validator.Validator();
 
 
 
+
 /**
  * Verifica se a variavel existe
  * 
@@ -25,41 +26,26 @@ exports.isset = function (variavel)
 /**
  * Se nenhum parametro for informado retorna o diretorio raiz
  * Se o primeiro parametro for informado retorna o diretorio solicitado
- * Se os dois parametros forem informados retorna um arquivo.
+ * Se o sergundo paramentro for informado retorna um arquivo
  * 
- * @param {object} obj {'endereco': 'arquivo'}
- * @return 
+ * @param endereco
+ * @return String
  */
-exports.dirRaiz = function(endereco, arquivo)
+exports.dirRaiz = function(endereco)
 {
     if(!this.isset(endereco)){
         endereco = null;
     }
     
-    if(!this.isset(arquivo)){
-        arquivo = null;
-    }
-    
     var retorno = validator.validate(
-        {
-            endereco: endereco,
-            arquivo : arquivo
-        }, 
-        {
-            'endereco' : [new Assert().NotBlank(), new Assert().NotNull()],
-            'arquivo'  : [new Assert().NotBlank(), new Assert().NotNull()]
-        }
+        { endereco : endereco }, 
+        { endereco : [new Assert().NotBlank(), new Assert().NotNull()] }
     );
     
-    
     if(retorno === true){
-        return path.normalize(path.resolve(__dirname, '../../') +'/'+ endereco +'/'+ arquivo);
-    }
-    else{
-        if(!this.isset(retorno.endereco)){
-            return path.normalize(path.resolve(__dirname, '../../') +'/'+ endereco);
-        }
+        return path.normalize(path.resolve(__dirname, '../../') +'/'+ endereco);
     }
     
+    //Diretorio raiz do projeto
     return path.normalize(path.resolve(__dirname, '../../'));
 };

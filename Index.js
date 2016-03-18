@@ -30,5 +30,5 @@
 
 var teste = require('./app/lib/Util');
 
-var retorno = teste.dirRaiz('app');
+var retorno = teste.dirRaiz('app/lib/Socket');
 console.log(retorno);
