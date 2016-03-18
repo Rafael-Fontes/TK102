@@ -40,24 +40,26 @@ exports.dirRaiz = function(endereco, arquivo)
         arquivo = null;
     }
     
-    var objeto = {
-        endereco: endereco,
-        arquivo : arquivo
-    };
-      
-    var validacao = {
-        'endereco' : [new Assert().NotBlank(), new Assert().NotNull()],
-        'arquivo'  : [new Assert().NotBlank(), new Assert().NotNull()]
-    };
+    var retorno = validator.validate(
+        {
+            endereco: endereco,
+            arquivo : arquivo
+        }, 
+        {
+            'endereco' : [new Assert().NotBlank(), new Assert().NotNull()],
+            'arquivo'  : [new Assert().NotBlank(), new Assert().NotNull()]
+        }
+    );
     
-    var retorno   = validator.validate(objeto, validacao);
     
-console.log(retorno);    
-
     if(retorno === true){
         return path.normalize(path.resolve(__dirname, '../../') +'/'+ endereco +'/'+ arquivo);
     }
     else{
-       // if(retorno)
+        if(!this.isset(retorno.endereco)){
+            return path.normalize(path.resolve(__dirname, '../../') +'/'+ endereco);
+        }
     }
+    
+    return path.normalize(path.resolve(__dirname, '../../'));
 };
