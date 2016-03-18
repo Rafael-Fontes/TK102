@@ -14,7 +14,6 @@
   "dependencies": {
     "mysql": "^2.10.2",
     "sequelize": "^3.19.3",
-    "validator": "^5.1.0",
     "winston": "^2.2.0"
   }
 }
