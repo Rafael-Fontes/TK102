@@ -25,9 +25,8 @@ exports.isset = function (variavel)
 
 /**
  * Se nenhum parametro for informado retorna o diretorio raiz
- * Se o primeiro parametro for informado retorna o diretorio solicitado
- * Se o sergundo paramentro for informado retorna um arquivo
- * 
+ * Se o parametro endereço for informado retorna o diretorio solicitado ou arquivo
+ *  
  * @param endereco
  * @return String
  */

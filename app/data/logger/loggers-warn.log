@@ -1,20 +1,6 @@
-{"oiii":"ooiiiiiiiii","level":"warn","message":"","timestamp":"2016-03-18T20:42:04.793Z"}
-{"message":"ooiiiiiiiii","level":"warn","timestamp":"2016-03-18T20:42:25.462Z"}
-{"message":"","level":"warn","timestamp":"2016-03-18T20:42:31.027Z"}
-{"message":"Endereço em usuo","level":"warn","timestamp":"2016-03-18T20:44:18.334Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:44:21.474Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:44:26.581Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:44:53.191Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:45:15.282Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:46:56.381Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:47:09.549Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:47:39.843Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:47:45.856Z"}
-{"message":"Endereço em uso","level":"warn","timestamp":"2016-03-18T20:48:13.191Z"}
-{"message":"O seguinte endereço encontrase em uso","level":"warn","timestamp":"2016-03-18T20:48:36.345Z"}
-{"message":"O seguinte endereço encontrase em uso: ","level":"warn","timestamp":"2016-03-18T20:48:48.329Z"}
-{"message":"O seguinte endereço encontrase em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-18T20:49:46.579Z"}
-{"message":"O seguinte endereço encontrase em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-18T20:49:53.493Z"}
-{"message":"O seguinte endereço encontrase em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-18T20:49:57.580Z"}
-{"message":"O seguinte endereço encontrase em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-18T20:50:00.611Z"}
-{"message":"Endereço em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-18T20:50:13.078Z"}
+{"message":"Endereço em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-19T00:25:39.589Z"}
+{"message":"Endereço em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-19T00:26:14.090Z"}
+{"message":"Endereço em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-19T00:26:21.778Z"}
+{"message":"Endereço em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-19T00:26:27.670Z"}
+{"message":"Endereço em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-19T00:26:29.737Z"}
+{"message":"Endereço em uso: 127.0.0.1:3000","level":"warn","timestamp":"2016-03-19T00:26:54.219Z"}

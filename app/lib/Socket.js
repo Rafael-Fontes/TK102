@@ -3,16 +3,14 @@ var logger = require('./Logger');
  var gerarLogger = logger.logger();
 
 /*
- * 
+ * @param modulo
  */
-exports.Socket = function()
+exports.Socket = function(modulo)
 {
     var servidor = net.createServer();
     
     servidor.on('connection', function(cliente)
     {
-        console.log('Novo cliente conectado');
-        
         //Recebe mensagem do cliente
         cliente.on('data', function (mensagem)
         {
@@ -29,17 +27,16 @@ exports.Socket = function()
         
     });
     
+    
+    
     //Tratamento de erros
     servidor.on('error', function(erro)
     {
         console.log(erro);
         if (erro.code === 'EADDRINUSE') 
         {
-            console.log('Endereço em uso, aguardando para tentar novamente...');
-            gerarLogger.warn({
-                'message' : 'Endereço em uso: ' +erro.address +':'+ erro.port
-            });
-           // servidor.close();
+            gerarLogger.warn({'message' : 'Endereço em uso: ' +erro.address +':'+ erro.port});
+            servidor.close();
         }
     });
     
