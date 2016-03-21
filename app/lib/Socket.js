@@ -3,12 +3,14 @@
     var $net  = require('net');
     var $Util = require('./Util');
 
+
     /**
      * Classee Socket
     */
     function Socket()
     {
         var $self = this;
+        var $util = new $Util();
 
         var socketPorta;
         var socketHost;
@@ -23,6 +25,9 @@
          */
         $self.setPorta = function ($pPorta)
         {
+            if(!$util.isset($pPorta) || $util.isEmpty($pPorta)){
+                throw new Error ('É necessario informa uma porta');
+            }
             socketPorta = $pPorta;
         };
 
@@ -120,7 +125,6 @@
                     $servidor.close();
                 }
             });
-
 
 
             var $confServ = {
