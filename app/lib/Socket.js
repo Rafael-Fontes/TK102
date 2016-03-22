@@ -102,6 +102,7 @@
         };
 
 
+
         /**
          * Retorna o nome do modulo
          * @return {String}
@@ -110,6 +111,7 @@
         {
             return moduloIsntancia;
         };
+
 
 
         /*
@@ -123,6 +125,7 @@
             {
                 //Recebe mensagem do cliente
                 cliente.on('data', function (mensagem) {
+                    //setModuloInstancia();
                     console.log(mensagem.toString().trim());
                 });
 
@@ -138,7 +141,9 @@
             //Trabamento de erros
             $servidor.on('error', function(erro)
             {
-                if (erro.code === 'EADDRINUSE') {
+                if (erro.code === 'EADDRINUSE') 
+                {
+                    $logger.logger.warn({message: 'O seguinte endereço: ' + $self.getHost() +':'+ $self.getPorta() +' encontra-se ocupado.'});
                     $servidor.close();
                 }
             });
