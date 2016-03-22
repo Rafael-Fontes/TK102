@@ -125,8 +125,7 @@
             {
                 //Recebe mensagem do cliente
                 cliente.on('data', function (mensagem) {
-                    //setModuloInstancia();
-                    console.log(mensagem.toString().trim());
+                    $self.getModuloInstancia().processarDados(cliente, mensagem);
                 });
 
 
@@ -141,6 +140,7 @@
             //Trabamento de erros
             $servidor.on('error', function(erro)
             {
+                console.log(erro);
                 if (erro.code === 'EADDRINUSE') 
                 {
                     $logger.logger.warn({message: 'O seguinte endereço: ' + $self.getHost() +':'+ $self.getPorta() +' encontra-se ocupado.'});
