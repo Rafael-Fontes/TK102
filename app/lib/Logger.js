@@ -1,21 +1,21 @@
 /*
     Documento  : Logger.js
     Criado     : 29/07/2015
-    Modificado : 18/03/2016
+    Modificado : 22/03/2016
     Autor      : rafaelk-f@hotmail.com
     URL        : https://github.com/winstonjs/winston
     Descrição  :
         Configurações do modolulo "winston" responsavel por gravar os loggers
 */
 
-(function() 
+(function()
 {
     var $winston = require('winston');
-    var util    = require('./Util');
-    
-    this.Logger = function ()
+    var util     = require('./Util');
+
+    function Logger()
     {
-        var logger = new (winston.Logger)
+        this.logger = new ($winston.Logger)
         ({
             transports:
             [
@@ -62,9 +62,9 @@
                     humanReadableUnhandledException: true
                 })
             ]
-        });        
+        });
     };
-    
+
     module.exports = Logger;
-    
+
 })(this);
