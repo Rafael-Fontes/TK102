@@ -1,7 +1,8 @@
 (function ()
 {
-    var $net  = require('net');
-    var $Util = require('./Util');
+    var $net    = require('net');
+    var $Util   = require('./Util');
+    var $Logger = require('./Logger');
 
 
     /**
@@ -155,6 +156,7 @@
                                     +' rodando em: '
                                     + $self.getHost()
                                     +':'+ $self.getPorta();
+                $logger = new $Logger();
                 console.log(msg);
             });
         };
