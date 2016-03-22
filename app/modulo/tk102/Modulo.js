@@ -12,10 +12,19 @@
 {
     var $Logger = require('../../lib/Logger');
     var $logger = new $Logger();
+    
+    var $Util   = require('../../lib/Util');
+    var $util   = new $Util();
+    
+    var $Comando = require('./Comandos');
+    var $comando = new $Comando();
 
+
+    /**
+     * Classe Modulo
+     */
     function Modulo()
     {
-        //##,imei:359586015829802,A;
 
         /*
          * Recebe as mensagens do modulo rastreador
@@ -31,9 +40,19 @@
                 $cliente.end();
                 return;
             }
-
-
+            
+            var $arrayDados = quebrarMensagem($dados);
+            var $imei       = extrairImei($dados);
+            
+            
+            if($arrayDados.length === 1)
+            {
+                $cliente.write(new Buffer($comando.load()));
+            }
         };
+
+
+
 
 
         /**
@@ -44,18 +63,22 @@
          *
          *   Retorna IMEI se o valor for encontrado
          *   Retorna um IMEI inexistente caso o IMEI não for encontrado
+         *   
+         *   @param {String} $dados
          */
         var extrairImei = function($dados)
         {
             if($dados.indexOf('imei:', 0) !== -1)
             {
-                var imei = (/imei\:([0-9]*)/).exec($dados);
-                if(imei[1])
-                    return imei[1];
+                var $imei = (/imei\:([0-9]*)/).exec($dados);
+                if($imei[1])
+                    return $imei[1];
             }
-            else if(1===1)
+            else
             {
-                return $dados;
+                var $possivelImei = parseInt($dados);
+                if($util.isInt($possivelImei))
+                    return $possivelImei;
             }
 
             return "111111111111111";
@@ -100,7 +123,7 @@
          *
          * No GPS S(South) => SUL e W(West) => OESTE
          *
-         * @param {String} dados
+         * @param {String} $dados
          */
         var getPolaridade = function($dados)
         {
@@ -114,10 +137,11 @@
         /**
         * @param {String} $dados
         */
-        var convertePonto = function($dados){
-           var parteInteira = ~~(Math.round($dados)/100);
-           var parteDecimal = ($dados - (parteInteira * 100)) / 60;
-           return (parteInteira + parteDecimal).toFixed(6);
+        var convertePonto = function($dados)
+        {
+           var $parteInteira = ~~(Math.round($dados)/100);
+           var $parteDecimal = ($dados - ($parteInteira * 100)) / 60;
+           return ($parteInteira + $parteDecimal).toFixed(6);
         };
 
 

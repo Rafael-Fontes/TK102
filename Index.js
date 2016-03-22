@@ -4,15 +4,16 @@ var $TK     = require('./app/modulo/tk102/Modulo');
 var $socket = new $Socket();
 
 //Modulo TK102
-//var $tk = new $TK();
+var $tk = new $TK();
+
+$socket.setHost('172.31.15.149');
+$socket.setPorta(16000);
+$socket.setModuloNome('TK102');
+$socket.setModuloInstancia($tk);
+$socket.iniciaServidor();
+
+
+//var dados = "##,imei:359586015829802,A;";
 //
-//$socket.setHost('172.31.15.149');
-//$socket.setPorta(16000);
-//$socket.setModuloNome('TK102');
-//$socket.setModuloInstancia($tk);
-//$socket.iniciaServidor();
-
-
-var dados = "##,imei:359586015829802,A;";
-
-console.log(dados.indexOf("imei", 0));
+////console.log( Object.prototype.toString.call(parseInt("###359586bbb015829802##")));
+//console.log(parseInt("359586bbb015829802"));

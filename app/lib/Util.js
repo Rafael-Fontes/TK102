@@ -68,6 +68,20 @@
 
 
         /**
+        * Verifica se o objeto informado é um objeto
+        *
+        * @param $variavel
+        * @return boolean
+        */
+        this.isInt = function($variavel)
+        {
+            return Object.prototype.toString().call($variavel === '[object Int]');
+        };
+
+
+
+
+        /**
         * Verifica se o objeto informado esta vazio
         *
         * @param $obj
