@@ -36,7 +36,8 @@
          * Retorna a porta que o servidor ouvira
          * @return Int
          */
-        $self.getPorta = function(){
+        $self.getPorta = function()
+        {
             return socketPorta;
         };
 
@@ -45,7 +46,11 @@
          * Recebe o host "IP" do servidor
          * @param {String} $pHost
          */
-        $self.setHost = function ($pHost){
+        $self.setHost = function ($pHost)
+        {
+            if(!$util.isset($pHost) || $util.isEmpty($pHost)){
+                throw new Error ('É necessario informa o Host "IP" do servidor');
+            }
             socketHost = $pHost;
         };
 
@@ -63,7 +68,11 @@
          * Recebe o nome do modulo
          * @param {String} $pNome
          */
-        $self.setModuloNome = function($pNome){
+        $self.setModuloNome = function($pNome)
+        {
+            if(!$util.isset($pNome) || $util.isEmpty($pNome)){
+                throw new Error ('É necessario informa o nome do modulo');
+            }
             moduloNome = $pNome;
         };
 
@@ -72,7 +81,8 @@
          * Retorna o nome do modulo
          * @return {String}
          */
-        $self.getModuloNome = function(){
+        $self.getModuloNome = function()
+        {
             return moduloNome;
         };
 
@@ -81,7 +91,11 @@
          * Recebe a instancia do modulo
          * @param {String} $pInstancia
          */
-        $self.setModuloInstancia = function($pInstancia){
+        $self.setModuloInstancia = function($pInstancia)
+        {
+            if(!$util.isset($pInstancia) || $util.isEmpty($pInstancia)){
+                throw new Error ('É necessario informa a instancia do modulo');
+            }
             moduloIsntancia = $pInstancia;
         };
 
@@ -90,7 +104,8 @@
          * Retorna o nome do modulo
          * @return {String}
          */
-        $self.getModuloInstancia = function(){
+        $self.getModuloInstancia = function()
+        {
             return moduloIsntancia;
         };
 
