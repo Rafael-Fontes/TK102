@@ -108,16 +108,73 @@
         this.isEmpty = function ($variavel)
         {
             var $vazio = [null, false, 0, '0', '', ' '];
-            
+
             for(var i = 0; i <= $vazio.length; i++){
                 if($variavel === $vazio[i]){
                     return true;
                 }
             }
-            
+
             return false;
         };
 
+
+
+
+        /**
+        * Remove todos os caracteres, exceto digitos e espaço
+        *
+        * @param $variavel
+        */
+        this.higienizarNumeroInteiro = function($variavel)
+        {
+            if(isset($variavel) && !isEmpty($variavel)){
+                return $variavel.replace(/[^\d ]+/g, "");
+            }
+        };
+
+
+
+
+        /**
+        * Remove todos os caracteres, exceto digitos, espaço e ponto
+        *
+        * @param $variavel
+        */
+        this.higienizarNumeroDecimal = function($variavel)
+        {
+            if(isset($variavel) && !isEmpty($variavel)){
+                return $variavel.replace(/[^\d. ]+/g, "");
+            }
+        };
+
+
+
+
+        /**
+         * Remove tudo que não seja um numero ou uma letra do alfabeto ou um espaço
+         * @param $variavel
+         */
+        this.higienizarAlfaNumerico = function($variavel)
+        {
+            if(isset($variavel) && !isEmpty($variavel)){
+                return $variavel.replace(/[^a-zA-Z0-9 ]+/g, "");
+            }
+        };
+
+
+
+
+    /*
+     *   Remove tudo que não seja letra ou espaço
+     *   @param $variavel
+     */
+    exports.higienizarLetras = function($variavel)
+    {
+        if(isset($variavel) && !isEmpty($variavel)){
+            return $variavel.replace(/[^a-zA-Z ]+/g, "");
+        }
+    };
 
 
 

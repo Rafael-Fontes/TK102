@@ -7,13 +7,8 @@ var $socket = new $Socket();
 var $tk = new $TK();
 
 $socket.setHost('172.31.15.149');
+//$socket.setHost('localhost');
 $socket.setPorta(16000);
 $socket.setModuloNome('TK102');
 $socket.setModuloInstancia($tk);
 $socket.iniciaServidor();
-
-
-//var dados = "##,imei:359586015829802,A;";
-//
-////console.log( Object.prototype.toString.call(parseInt("###359586bbb015829802##")));
-//console.log(parseInt("359586bbb015829802"));

@@ -2,7 +2,7 @@
     Documento  : Princiapl.js
     Criado     : 22/03/2016
     Modificado : 22/03/2016
-    Autor      :
+    Autor      : rafaelk-f@hotmail.com
     Descrição  :
         Trata os dados passados pelo GPS
 */
@@ -10,13 +10,16 @@
 
 (function()
 {
-    var $Logger = require('../../lib/Logger');
-    var $logger = new $Logger();
+    'use strict';
     
-    var $Util   = require('../../lib/Util');
-    var $util   = new $Util();
     
-    var $Comando = require('./Comandos');
+    var $Logger  = require('../../lib/Logger');
+    var $logger  = new $Logger();
+    
+    var $Util    = require('../../lib/Util');
+    var $util    = new $Util();
+    
+    var $Comando = require('./Comando');
     var $comando = new $Comando();
 
 
@@ -43,12 +46,29 @@
             
             var $arrayDados = quebrarMensagem($dados);
             var $imei       = extrairImei($dados);
+            var $chave      = '';
             
             
             if($arrayDados.length === 1)
             {
-                $cliente.write(new Buffer($comando.load()));
+                $cliente.write(new Buffer($comando.on()));
+                console.log('Comando ON enviado');
+                return;
             }
+            
+            if ($arrayDados && $arrayDados[2] === "A;") 
+            {
+                $cliente.write(new Buffer($comando.load()));
+                console.log('Comando LOAD');
+                return;
+            }
+            
+            if ($arrayDados && $arrayDados[4] && $arrayDados[4] === "F")
+            {
+                
+            }
+            
+            console.log($dados);
         };
 
 

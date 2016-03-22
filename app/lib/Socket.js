@@ -1,5 +1,7 @@
 (function ()
 {
+    'use strict';
+    
     var $net    = require('net');
     var $Util   = require('./Util');
     var $Logger = require('./Logger');
