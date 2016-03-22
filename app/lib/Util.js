@@ -1,61 +1,12 @@
 
-
-//var Validator = require('validator.js');
-//var Assert    = Validator.Assert;
-//var validator = new Validator.Validator();
-
-
-
-//
-//
-///**
-// * Verifica se a variavel existe
-// *
-// * @param variavel
-// * @return boolean
-// */
-//exports.isset = function (variavel)
-//{
-//   return (typeof variavel !== 'undefined');
-//};
-//
-//
-//
-//
-//
-///**
-// * Se nenhum parametro for informado retorna o diretorio raiz
-// * Se o parametro endereço for informado retorna o diretorio solicitado ou arquivo
-// *
-// * @param endereco
-// * @return String
-// */
-//exports.dirRaiz = function(endereco)
-//{
-//    if(!this.isset(endereco)){
-//        endereco = null;
-//    }
-//
-//    var retorno = validator.validate(
-//        { endereco : endereco },
-//        { endereco : [new Assert().NotBlank(), new Assert().NotNull()] }
-//    );
-//
-//    if(retorno === true){
-//        return path.normalize(path.resolve(__dirname, '../../') +'/'+ endereco);
-//    }
-//
-//    //Diretorio raiz do projeto
-//    return path.normalize(path.resolve(__dirname, '../../'));
-//};
-
-
 (function()
 {
     'use strict';
 
-    var path = require('path');
-
+    var $path      = require('path');
+    var $Validator = require('validator.js');
+    var $Assert    = $Validator.Assert;
+    var $validator = new $Validator.Validator();
 
     function Util()
     {
@@ -142,13 +93,46 @@
         */
         this.isEmpty = function ($variavel)
         {
-            $variavel = $variavel.trim();
-            if ($variavel === null || $variavel === '') {
-                return true;
+            var $vazio = [null, false, 0, '0', '', ' '];
+            
+            for(var i = 0; i <= $vazio.length; i++){
+                if($variavel === $vazio[i]){
+                    return true;
+                }
             }
-
+            
             return false;
         };
+
+
+
+
+        /**
+        * Se nenhum parametro for informado retorna o diretorio raiz
+        * Se o parametro endereço for informado retorna o diretorio solicitado ou arquivo
+        *
+        * @param endereco
+        * @return String
+        */
+        this.dirRaiz = function(endereco)
+        {
+            if(!this.isset(endereco)){
+                endereco = null;
+            }
+
+            var retorno = $validator.validate(
+                { endereco : endereco },
+                { endereco : [new $Assert().NotBlank(), new $Assert().NotNull()] }
+            );
+
+            if(retorno === true){
+                return $path.normalize($path.resolve(__dirname, '../../') +'/'+ endereco);
+            }
+
+            //Diretorio raiz do projeto
+            return $path.normalize($path.resolve(__dirname, '../../'));
+        };
+
 
     };
 

@@ -10,41 +10,43 @@
 
 (function()
 {
-    var $winston = require('winston');
-    var util     = require('./Util');
+    var $Winston = require('winston');
+    var $Util     = require('./Util');
 
     function Logger()
     {
-        this.logger = new ($winston.Logger)
+        var $util = new $Util();
+        
+        this.logger = new ($Winston.Logger)
         ({
             transports:
             [
                 //new (winston.transports.Console)(),
 
-                new ($winston.transports.File)
+                new ($Winston.transports.File)
                 ({
                     name    : 'info-file',
-                    filename: util.dirRaiz('app/data/logger/loggers-info.log'),
+                    filename: $util.dirRaiz('app/data/logger/loggers-info.log'),
                     level   : 'info',
                     json    : true,
                     maxsize : 10485760, //10MB
                     maxFiles: 1
                 }),
 
-                new ($winston.transports.File)
+                new ($Winston.transports.File)
                 ({
                     name    : 'warn-file',
-                    filename: util.dirRaiz('app/data/logger/loggers-warn.log'),
+                    filename: $util.dirRaiz('app/data/logger/loggers-warn.log'),
                     level   : 'warn',
                     json    : true,
                     maxsize : 10485760, //10MB
                     maxFiles: 1
                 }),
 
-                new ($winston.transports.File)
+                new ($Winston.transports.File)
                 ({
                     name    : 'error-file',
-                    filename: util.dirRaiz('app/data/logger/loggers-error.log'),
+                    filename: $util.dirRaiz('app/data/logger/loggers-error.log'),
                     level   : 'error',
                     json    : true,
                     maxsize : 10485760, //10MB
@@ -53,10 +55,10 @@
             ],
             exceptionHandlers:
             [
-                new $winston.transports.File
+                new $Winston.transports.File
                 ({
                     name                           : ' exception-file',
-                    filename                       : util.dirRaiz('app/data/logger/exceptions.log'),
+                    filename                       : $util.dirRaiz('app/data/logger/exceptions.log'),
                     exitOnError                    : false ,
                     handleExceptions               : true,
                     humanReadableUnhandledException: true

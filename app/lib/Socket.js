@@ -10,8 +10,9 @@
     */
     function Socket()
     {
-        var $self = this;
-        var $util = new $Util();
+        var $self   = this;
+        var $util   = new $Util();
+        var $logger = new $Logger();
 
         var socketPorta;
         var socketHost;
@@ -156,7 +157,8 @@
                                     +' rodando em: '
                                     + $self.getHost()
                                     +':'+ $self.getPorta();
-                $logger = new $Logger();
+                            
+                $logger.logger.info({message: msg});
                 console.log(msg);
             });
         };
