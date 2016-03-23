@@ -1,7 +1,7 @@
 /*
     Documento  : Princiapl.js
     Criado     : 22/03/2016
-    Modificado : 22/03/2016
+    Modificado : 23/03/2016
     Autor      : rafaelk-f@hotmail.com
     Descrição  :
         Trata os dados passados pelo GPS
@@ -11,14 +11,14 @@
 (function()
 {
     'use strict';
-    
-    
+
+    var $moment  = require("moment");
     var $Logger  = require('../../lib/Logger');
     var $logger  = new $Logger();
-    
+
     var $Util    = require('../../lib/Util');
     var $util    = new $Util();
-    
+
     var $Comando = require('./Comando');
     var $comando = new $Comando();
 
@@ -35,7 +35,6 @@
         this.processarDados = function($cliente, $dados)
         {
             $dados = $dados.toString().trim();
-            
             console.log($dados);
 
             var regexpNumeros = new RegExp("^[0-9]{10,}$");
@@ -45,32 +44,40 @@
                 $cliente.end();
                 return;
             }
-            
+
+
             var $arrayDados = quebrarMensagem($dados);
             var $imei       = extrairImei($dados);
             var $chave      = '';
             
-console.log($arrayDados);   
 
             if($arrayDados.length === 1)
             {
                 $cliente.write(new Buffer($comando.on()));
-                console.log('Comando ON enviado');
+                $logger.logger.info({
+                    message  : 'Comando ' +$comando.on()+ ' enviado para o imei: ' + $imei,
+                    dataHora : $moment().format("YYYY-MM-DD HH:mm:ss")
+                });
+                
                 return;
             }
-            
-            if ($arrayDados && $arrayDados[2] === "A;") 
+
+            if ($arrayDados && $arrayDados[2] === "A;")
             {
                 $cliente.write(new Buffer($comando.load()));
-                console.log('Comando LOAD');
+                $logger.logger.info({
+                    message  : 'Comando ' +$comando.load()+ ' enviado para o imei: ' + $imei,
+                    dataHora : $moment().format("YYYY-MM-DD HH:mm:ss")
+                });
+
                 return;
             }
-            
+
             if ($arrayDados && $arrayDados[4] && $arrayDados[4] === "F")
             {
-                
-            }            
-            
+                //var $objGps   = getDadosGps($dados);
+            }
+
         };
 
 
@@ -84,7 +91,7 @@ console.log($arrayDados);
          *   909710047765412;
          *
          *   Retorna IMEI se o valor for encontrado
-         *   
+         *
          *   @param {String} $dados
          */
         var extrairImei = function($dados)
@@ -190,7 +197,7 @@ console.log($arrayDados);
         var getDadosGps = function($dados)
         {
             var $arrayDados = quebrarMensagem($dados);
-            
+
             //Higienização dos dados
             $arrayDados[0]  = $util.higienizarNumeroInteiro($arrayDados[0].trim());
             $arrayDados[1]  = $util.higienizarLetras($arrayDados[1]);
@@ -204,18 +211,17 @@ console.log($arrayDados);
             $arrayDados[9]  = $util.higienizarNumeroDecimal($arrayDados[9]);
             $arrayDados[10] = $util.higienizarLetras($arrayDados[10]);
             $arrayDados[11] = $util.higienizarNumeroDecimal($arrayDados[11]);
-            
-            
+
+
             //Montar obj que sera retornado
             var $objDados = {
                 imei      : $arrayDados[0],
                 msg       : $arrayDados[1],
-                foneAdmin : $arrayDados[3]                
+                foneAdmin : $arrayDados[3]
             };
-            
+
             return $objDados;
         };
-
 
     };
 

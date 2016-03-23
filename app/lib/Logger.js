@@ -21,7 +21,7 @@
         ({
             transports:
             [
-                //new (winston.transports.Console)(),
+                new ($Winston.transports.Console)(),
 
                 new ($Winston.transports.File)
                 ({

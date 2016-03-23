@@ -1,8 +1,9 @@
 (function ()
 {
     'use strict';
-    
+
     var $net    = require('net');
+    var $moment = require('moment');
     var $Util   = require('./Util');
     var $Logger = require('./Logger');
 
@@ -143,7 +144,7 @@
             $servidor.on('error', function(erro)
             {
                 console.log(erro);
-                if (erro.code === 'EADDRINUSE') 
+                if (erro.code === 'EADDRINUSE')
                 {
                     $logger.logger.warn({message: 'O seguinte endereço: ' + $self.getHost() +':'+ $self.getPorta() +' encontra-se ocupado.'});
                     $servidor.close();
@@ -159,14 +160,13 @@
             //Inicía o servidor
             $servidor.listen($confServ, function ()
             {
-                var msg = 'Servidor '
-                                    +$self.getModuloNome()
-                                    +' rodando em: '
-                                    + $self.getHost()
-                                    +':'+ $self.getPorta();
-                            
-                $logger.logger.info({message: msg});
-                console.log(msg);
+                var objMsg = {
+                    message  : 'Servidor ' +$self.getModuloNome() +' rodando em: ' + $self.getHost() +':'+ $self.getPorta(),
+                   // timestamp: $moment().format("YYYY-MM-DD HH:mm:ss")
+                };
+
+                $logger.logger.info(objMsg);
+                console.log(objMsg);
             });
         };
 

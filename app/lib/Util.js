@@ -75,7 +75,7 @@
         */
         this.isInt = function($variavel)
         {
-            return Object.prototype.toString().call($variavel === '[object Int]');
+            return Object.prototype.toString.call($variavel === '[object Int]');
         };
 
 
