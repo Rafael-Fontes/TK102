@@ -18,9 +18,17 @@ var $tk = new $TK();
 
 
 
-var $Mysql = require('./app/lib/Mysql');
-var $bd = new $Mysql();
+//var $Mysql = require('./app/lib/Mysql');
+//var $bd = new $Mysql();
+//
+//
+//$bd.teste(function($resposta){
+//    console.log($resposta);
+//});
 
+var $BD = new require('./app/lib/BD');
+var $bd = new $BD();
 
-var $retorno = $bd.getLogin('751374');
-//console.log($retorno);
+$bd.login(751374, function ($dados){
+    console.log($dados);
+});
