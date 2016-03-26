@@ -17,7 +17,7 @@
 
         var $conexao = null;
         var $config = {
-            'host'    : '54.232.252.153',
+            'host'    : 'localhost',
             'porta'   : '3306',
             'usuario' : 'root',
             'senha'   : 'root',
