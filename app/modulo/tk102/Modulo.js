@@ -10,17 +10,15 @@
 
 (function()
 {
+    
     'use strict';
 
-    var $moment  = require("moment");
-    var $Logger  = require('../../lib/Logger');
-    var $logger  = new $Logger();
-
-    var $Util    = require('../../lib/Util');
-    var $util    = new $Util();
-
-    var $Comando = require('./Comando');
-    var $comando = new $Comando();
+    var $moment     = require("moment");
+    var $Logger     = require('../../lib/Logger');
+    var $Util       = require('../../lib/Util');
+    var $Autenticar = require('../../lib/Autenticar');
+    var $BancoDados = require('../../lib/BancoDados');
+    var $Comando    = require('./Comando');
 
 
     /**
@@ -28,6 +26,65 @@
      */
     function Modulo()
     {
+
+        /**
+         * @return app/lib/Util()
+         */
+        var getUtil = function ()
+        {
+            return (new $Util());
+        };
+
+
+
+
+        /**
+         *
+         * @returns app/lib/Logger()
+         */
+        var getLogger = function ()
+        {
+            return (new $Logger());
+        };
+
+
+
+
+        /**
+         *
+         * @returns app/lib/Autenticar()
+         */
+        var getAutenticar = function ()
+        {
+            return (new $Autenticar());
+        };
+
+
+
+
+        /**
+         *
+         * @returns app/lib/BancoDados()
+         */
+        var getBancoDados = function ()
+        {
+            return (new $BancoDados());
+        };
+
+
+
+
+        /**
+         *
+         * @returns app/modulo/tk102/Comando()
+         */
+        var getComando = function ()
+        {
+            return (new $Comando());
+        };
+
+
+
 
         /*
          * Recebe as mensagens do modulo rastreador
@@ -48,25 +105,36 @@
 
             var $arrayDados = quebrarMensagem($dados);
             var $imei       = extrairImei($dados);
-            var $chave      = '';
+            var $idModulo   = null;
             
+
+//            var $autenticar = new $Autenticar();
+//            $autenticar.login($imei, function($obj){
+//                if($obj.length === 0){
+//                    $cliente.end();
+//                    return;
+//                }
+//                $idModulo = $obj.id;
+//                console.log($obj.id);
+//            });
+
 
             if($arrayDados.length === 1)
             {
-                $cliente.write(new Buffer($comando.on()));
-                $logger.logger.info({
-                    message  : 'Comando ' +$comando.on()+ ' enviado para o imei: ' + $imei,
+                $cliente.write(new Buffer(getComando().on()));
+                getLogger().logger.info({
+                    message  : 'Comando ' +getComando().on()+ ' enviado para o imei: ' + $imei,
                     dataHora : $moment().format("YYYY-MM-DD HH:mm:ss")
                 });
-                
+
                 return;
             }
 
             if ($arrayDados && $arrayDados[2] === "A;")
             {
-                $cliente.write(new Buffer($comando.load()));
-                $logger.logger.info({
-                    message  : 'Comando ' +$comando.load()+ ' enviado para o imei: ' + $imei,
+                $cliente.write(new Buffer(getComando().load()));
+                getLogger().logger.info({
+                    message  : 'Comando ' +getComando().load()+ ' enviado para o imei: ' + $imei,
                     dataHora : $moment().format("YYYY-MM-DD HH:mm:ss")
                 });
 
@@ -75,7 +143,28 @@
 
             if ($arrayDados && $arrayDados[4] && $arrayDados[4] === "F")
             {
-                //var $objGps   = getDadosGps($dados);
+                var $dadosGps   = getDadosGps($dados);
+             
+                getAutenticar().login($imei, function($obj){
+                    if($obj.length === 0){
+                        $cliente.end();
+                        return;
+                    }
+                    
+                    var $objBd = {
+                        id_modulo         : $obj.id,
+                        datahora          : $moment($dadosGps.data).format("YYYY-MM-DD HH:mm:ss"),
+                        latitude          : $dadosGps.lat,
+                        longitude         : $dadosGps.lng,
+                        velocidade        : $dadosGps.velocidade,
+                        datahora_gravacao : $dadosGps.criado,
+                        panico            : 0
+                    };
+                    
+                    getBancoDados().salvar($objBd);
+                    console.log($objBd);
+
+                 });
             }
 
         };
@@ -105,7 +194,7 @@
             else
             {
                 var $possivelImei = parseInt($dados);
-                if($util.isInt($possivelImei))
+                if(getUtil().isInt($possivelImei))
                     return $possivelImei;
             }
         };
@@ -199,25 +288,39 @@
             var $arrayDados = quebrarMensagem($dados);
 
             //Higienização dos dados
-            $arrayDados[0]  = $util.higienizarNumeroInteiro($arrayDados[0].trim());
-            $arrayDados[1]  = $util.higienizarLetras($arrayDados[1]);
-            $arrayDados[2]  = $util.higienizarNumeroInteiro($arrayDados[2]);
+            $arrayDados[0]  = getUtil().higienizarNumeroInteiro($arrayDados[0]);
+            $arrayDados[1]  = getUtil().higienizarLetras($arrayDados[1]);
+            $arrayDados[2]  = getUtil().higienizarNumeroInteiro($arrayDados[2]);
             //$arrayDados[3]  = $arrayDados[3];
-            $arrayDados[4]  = $util.higienizarLetras($arrayDados[4]);
-            $arrayDados[5]  = $util.higienizarNumeroDecimal($arrayDados[5]);
-            $arrayDados[6]  = $util.higienizarLetras($arrayDados[6]);
-            $arrayDados[7]  = $util.higienizarNumeroDecimal($arrayDados[7]);
-            $arrayDados[8]  = $util.higienizarLetras($arrayDados[8]);
-            $arrayDados[9]  = $util.higienizarNumeroDecimal($arrayDados[9]);
-            $arrayDados[10] = $util.higienizarLetras($arrayDados[10]);
-            $arrayDados[11] = $util.higienizarNumeroDecimal($arrayDados[11]);
+            $arrayDados[4]  = getUtil().higienizarLetras($arrayDados[4]);
+            $arrayDados[5]  = getUtil().higienizarNumeroDecimal($arrayDados[5]);
+            $arrayDados[6]  = getUtil().higienizarLetras($arrayDados[6]);
+            $arrayDados[7]  = getUtil().higienizarNumeroDecimal($arrayDados[7]);
+            $arrayDados[8]  = getUtil().higienizarLetras($arrayDados[8]);
+            $arrayDados[9]  = getUtil().higienizarNumeroDecimal($arrayDados[9]);
+            $arrayDados[10] = getUtil().higienizarLetras($arrayDados[10]);
+            $arrayDados[11] = getUtil().higienizarNumeroDecimal($arrayDados[11]);
 
 
             //Montar obj que sera retornado
             var $objDados = {
-                imei      : $arrayDados[0],
-                msg       : $arrayDados[1],
-                foneAdmin : $arrayDados[3]
+                imei        : $arrayDados[0],
+                msg         : $arrayDados[1],
+                foneAdmin   : $arrayDados[3],
+                data        : new Date(
+                                    parseInt("20" + $arrayDados[2].substr(0, 2), 10),
+                                    parseInt($arrayDados[2].substr(2,2),10),
+                                    parseInt($arrayDados[2].substr(4,2),10),
+                                    parseInt($arrayDados[2].substr(6,2),10),
+                                    parseInt($arrayDados[2].substr(8,2),10),
+                                    parseInt($arrayDados[2].substr(10,2),10)
+                                ),
+                sinal       : $arrayDados[4],
+                tempo       : $arrayDados[5],
+                lat         : getPolaridade($arrayDados[8])  * convertePonto(parseFloat($arrayDados[7])),
+                lng         : getPolaridade($arrayDados[10]) * convertePonto(parseFloat($arrayDados[9])),
+                velocidade  : parseInt($arrayDados[11], 10) * 1.85,
+                criado      : $moment().format("YYYY-MM-DD HH:mm:ss")
             };
 
             return $objDados;
