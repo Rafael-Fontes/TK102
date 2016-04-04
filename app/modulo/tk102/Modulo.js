@@ -10,7 +10,7 @@
 
 (function()
 {
-    
+
     'use strict';
 
     var $moment     = require("moment");
@@ -19,6 +19,7 @@
     var $Autenticar = require('../../lib/Autenticar');
     var $BancoDados = require('../../lib/BancoDados');
     var $Comando    = require('./Comando');
+    var $Redis      = require('../../lib/Redis');
 
 
     /**
@@ -74,6 +75,18 @@
 
 
 
+         /**
+         *
+         * @returns app/lib/$Redis()
+         */
+        var getRedis = function ()
+        {
+            return (new $Redis());
+        };
+
+
+
+
         /**
          *
          * @returns app/modulo/tk102/Comando()
@@ -105,18 +118,6 @@
 
             var $arrayDados = quebrarMensagem($dados);
             var $imei       = extrairImei($dados);
-            var $idModulo   = null;
-            
-
-//            var $autenticar = new $Autenticar();
-//            $autenticar.login($imei, function($obj){
-//                if($obj.length === 0){
-//                    $cliente.end();
-//                    return;
-//                }
-//                $idModulo = $obj.id;
-//                console.log($obj.id);
-//            });
 
 
             if($arrayDados.length === 1)
@@ -144,27 +145,33 @@
             if ($arrayDados && $arrayDados[4] && $arrayDados[4] === "F")
             {
                 var $dadosGps   = getDadosGps($dados);
-             
+
                 getAutenticar().login($imei, function($obj){
                     if($obj.length === 0){
                         $cliente.end();
                         return;
                     }
+
+
+                    //interpretarMessagem($dadosGps.msg, $dadosGps.imei);
                     
+
                     var $objBd = {
                         id_modulo         : $obj.id,
+                        entrada1          : $dadosGps.msg,
                         datahora          : $moment($dadosGps.data).format("YYYY-MM-DD HH:mm:ss"),
                         latitude          : $dadosGps.lat,
                         longitude         : $dadosGps.lng,
                         velocidade        : $dadosGps.velocidade,
                         datahora_gravacao : $dadosGps.criado,
-                        panico            : 0
+                        panico            : ($dadosGps.msg === 'help me') ? 1 : 0,
+                        ignicao           : 0
                     };
-                    
+
                     getBancoDados().salvar($objBd);
                     console.log($objBd);
 
-                 });
+                });
             }
 
         };
@@ -264,6 +271,69 @@
 
 
         /**
+         * A dada recebida do rastreador está no seguinte formato 16032914233 - (16-03-29 14:23:37).
+         * A função ira receber essa data e converter para o formato YYYY-MM-DD HH:mm:ss
+         * @param  {Date} $data
+         * @return {Date}
+         */
+        var getDataRastreador = function($data)
+        {
+            if(!getUtil().isset($data) || getUtil().isEmpty($data)){
+                return '0000-00-00 00:00:00';
+            }
+
+            var $dt = $moment().get('year') + $data.substr(2, 10);
+
+            var $ano = $dt.substr(0, 4);
+            var $mes = $dt.substr(4, 2);
+            var $dia = $dt.substr(6, 2);
+            var $hor = $dt.substr(8, 2);
+            var $min = $dt.substr(10, 2);
+            var $seg = $dt.substr(12, 2);
+
+            var $data = $ano +'-'+ $mes +'-'+ $dia +' '+ $hor +':'+ $min +':'+ $seg;
+            if($moment($data).isValid())
+                return $moment($data).format('YYYY-MM-DD HH:mm:ss');
+            else
+                return '0000-00-00 00:00:00';
+        };
+
+
+
+
+
+        /**
+         * O segundo parametro da string enviada pelo rastreador corresponde a uma mensagem.
+         * Essa mensagem varia de acordo com o que esta ocorrendo.
+         * 
+         *      tracker     => 
+         *      help me     => alarme de SOS
+         *      low battery => alarme de bateria fraca
+         *      stockade    => 
+         *      dt          =>
+         *      move        =>
+         *      speed       =>
+         *
+         * @param $mensagem
+         * @param $imei
+         */
+        var interpretarMessagem = function ($mensagem, $imei)
+        {
+//            if($mensagem === 'acc on' || $mensagem === 'acc of')
+//            {
+//               var $chave = getRedis().criarChave($imei);
+//               getRedis().busca($imei, function($dados){
+//                    console.log($dados);
+//                });
+//            }
+            
+        };
+
+
+
+
+
+        /**
         * imei:000000000000000,tracker,150713220401,,F,140359.000,A,1643.5578,S,04916.8659,W,0.00,0;
         *
         * 00 => imei:000000000000000          [IMEI do GPS]
@@ -307,14 +377,7 @@
                 imei        : $arrayDados[0],
                 msg         : $arrayDados[1],
                 foneAdmin   : $arrayDados[3],
-                data        : new Date(
-                                    parseInt("20" + $arrayDados[2].substr(0, 2), 10),
-                                    parseInt($arrayDados[2].substr(2,2),10),
-                                    parseInt($arrayDados[2].substr(4,2),10),
-                                    parseInt($arrayDados[2].substr(6,2),10),
-                                    parseInt($arrayDados[2].substr(8,2),10),
-                                    parseInt($arrayDados[2].substr(10,2),10)
-                                ),
+                data        : getDataRastreador($arrayDados[2]),
                 sinal       : $arrayDados[4],
                 tempo       : $arrayDados[5],
                 lat         : getPolaridade($arrayDados[8])  * convertePonto(parseFloat($arrayDados[7])),

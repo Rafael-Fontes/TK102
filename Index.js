@@ -2,9 +2,9 @@ var $Socket = require('./app/lib/Socket');
 var $TK     = require('./app/modulo/tk102/Modulo');
 var $Util   = require('./app/lib/Util');
 var $moment = require('moment');
-var $BD     = require('./app/lib/BD');
 var $BancoDados = require('./app/lib/BancoDados');
 var $Autenticar = require('./app/lib/Autenticar');
+var $Redis      = require('./app/lib/Redis');
 
 
 var $socket = new $Socket();
@@ -23,16 +23,16 @@ $socket.setModuloInstancia($tk);
 $socket.iniciaServidor();
 
 
-var dados = '160326201309';
-
-var ano = dados.substr(0,2);
-var mes = dados.substr(2,2);
-var dia = dados.substr(4,2);
-var hora = dados.substr(6,2);
-var minu = dados.substr(8,2);
-var segu = dados.substr(10,2);
-
-console.log(segu);
+//var $redis = new $Redis();
+//
+//console.log($redis.criarChave('1111'));
+//
+//
+//$redis.salvar('usuario:0980997098:imei', {obj: 'Meu obj'});
+//
+//$redis.busca('usuario:0980997098:imei', function($dados){
+//    console.log($dados);
+//});
 
 
 //var $bd = new $BancoDados();

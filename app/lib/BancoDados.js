@@ -21,7 +21,7 @@
             'porta'   : '3306',
             'usuario' : 'root',
             'senha'   : 'root',
-            'banco'   : 'rastreamento3'
+            'banco'   : 'root'
         };
 
 
@@ -63,8 +63,15 @@
                     $config.senha,
                     {
                         'host'    : $config.host,
-                        'dialect' : 'mysql',
-                        define    : {
+                        'dialect' : 'mariadb',
+                        pool      : 
+                        {
+                            max : 5,
+                            min : 0,
+                            idle: 10000
+                        },
+                        define    : 
+                        {
                             timestamps      : false,
                             freezeTableName : true,
                             underscored     : true
@@ -87,22 +94,26 @@
             var $bd      = getConexao();
             var $posicao = $bd.define('posicao',
                 {
-                    id: {
+                    id: 
+                    {
                         type          : $Sequelize.INTEGER,
                         primaryKey    : true,
                         autoIncrement : true,
                         unique        : true,
                         allowNull     : false
                     },
-                    id_modulo: {
+                    id_modulo: 
+                    {
                         type          : $Sequelize.INTEGER,
                         allowNull     : false
                     },
-                    datahora: {
-                        type          : $Sequelize.DATE,
+                    datahora: 
+                    {
+                        type          : $Sequelize.STRING,
                         allowNull     : false
                     },
-                    latitude: {
+                    latitude: 
+                    {
                         type          : $Sequelize.DECIMAL(16, 13),
                         allowNull     : false
                     },
@@ -118,10 +129,20 @@
                     },
                     datahora_gravacao:
                     {
-                        type          : $Sequelize.DATE,
+                        type          : $Sequelize.STRING,
                         allowNull     : false
                     },
                     panico:
+                    {
+                        type          : $Sequelize.INTEGER,
+                        allowNull     : false
+                    },
+                    ignicao:
+                    {
+                        type          : $Sequelize.INTEGER,
+                        allowNull     : false
+                    },
+                    entrada1:
                     {
                         type          : $Sequelize.INTEGER,
                         allowNull     : false
