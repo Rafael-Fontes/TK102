@@ -17,11 +17,11 @@
 
         var $conexao = null;
         var $config = {
-            'host'    : 'localhost',
-            'porta'   : '3306',
-            'usuario' : 'root',
-            'senha'   : 'root',
-            'banco'   : 'root'
+            'host'    : '',
+            'porta'   : '',
+            'usuario' : '',
+            'senha'   : '',
+            'banco'   : ''
         };
 
 

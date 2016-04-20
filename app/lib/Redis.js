@@ -5,7 +5,7 @@
     Autor      :
     URL        : https://www.npmjs.com/package/ioredis
     Descrição  :
-        Contem a conexÃ£o e as querys do Redis
+        Contem a conexão e as querys do Redis
 */
 
 (function()
