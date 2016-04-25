@@ -144,7 +144,8 @@
 
             if ($arrayDados && $arrayDados[4] && $arrayDados[4] === "F")
             {
-                var $dadosGps   = getDadosGps($dados);
+                var $dadosGps = getDadosGps($dados);
+                var ignicao   = estadoIgnicao($dadosGps.msg, $imei);
 
                 getAutenticar().login($imei, function($obj){
                     if($obj.length === 0){
@@ -152,9 +153,9 @@
                         return;
                     }
 
-
+                    //$cliente.write(new Buffer(getComando().dataLoad()));
                     //interpretarMessagem($dadosGps.msg, $dadosGps.imei);
-                    
+
 
                     var $objBd = {
                         id_modulo         : $obj.id,
@@ -165,7 +166,7 @@
                         velocidade        : $dadosGps.velocidade,
                         datahora_gravacao : $dadosGps.criado,
                         panico            : ($dadosGps.msg === 'help me') ? 1 : 0,
-                        ignicao           : 0
+                        ignicao           : ignicao
                     };
 
                     getBancoDados().salvar($objBd);
@@ -303,13 +304,57 @@
 
 
         /**
+         *
+         * @param  {String} $mensagem
+         * @param  {Int}    $imei
+         * @return {Int}    $imei
+         */
+        var estadoIgnicao = function($mensagem, $imei)
+        {
+            var $chave = getRedis().criarChave($imei);
+
+            if($mensagem === 'acc on' || 'acc off')
+            {
+                var ign = ($mensagem === 'acc on') ? 1 : 0;
+                getRedis().busca($chave, function ($dados)
+                {
+                    $dados.ignicao = ign;
+                    getRedis().salvar($chave, $dados);
+                });
+            };
+
+            getRedis().busca($chave, function($dados)
+            {
+                if($dados.ignicao === '0' || $dados.ignicao === '1')
+                { console.log("=================== 0001");
+                    return $dados.ignicao;
+                }
+                else
+                {
+                    getLogger().logger.error({
+                        message  : 'Valor retornado pelo metodo estadoIgnicao() é diferente do esperado',
+                        dataHora : $moment().format("YYYY-MM-DD HH:mm:ss")
+                    });
+                    
+                    return 0;
+                }
+                
+                console.log("=================== 0002");
+            });
+        };
+
+
+
+
+
+        /**
          * O segundo parametro da string enviada pelo rastreador corresponde a uma mensagem.
          * Essa mensagem varia de acordo com o que esta ocorrendo.
-         * 
-         *      tracker     => 
+         *
+         *      tracker     =>
          *      help me     => alarme de SOS
          *      low battery => alarme de bateria fraca
-         *      stockade    => 
+         *      stockade    =>
          *      dt          =>
          *      move        =>
          *      speed       =>
@@ -326,7 +371,7 @@
 //                    console.log($dados);
 //                });
 //            }
-            
+
         };
 
 

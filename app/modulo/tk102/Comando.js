@@ -42,30 +42,42 @@
         {
             return 'ON';
         };
-        
-        
-        
-        
-        
+
+
+
+
+
         /**
          * Comando pemite especificar de quanto em quanto tempo se deseja obter uma resposta do dispositivo GPS.
-         * Exemplos: 
+         * Exemplos:
          *  **,imei:359586018966098,C,10s   => Dispositivo envia uma resposta a cada 10 segudos
          *  **,imei:359586018966098,C,1m    => Dispositivo envia uma resposta a cada 1 minuto
          *  **,imei:359586018966098,C,1h    => Dispositivo envia uma resposta a cada 1 hora
          *  **,imei:359586018966098,C,24h   => Dispositivo envia uma resposta a cada 24 horas
-         *  
+         *
          * @param   {Int}    $imei
          * @param   {String} $tempo
          * @returns String
          */
         this.posicaoMultipla = function($imei, $tempo)
         {
-            return "**,imei:" +$imei+ ",C," +$tempo; 
+            return "**,imei:" +$imei+ ",C," +$tempo;
         };
-        
+
+
+
+
+
+        /**
+         * @param   {Int}    $imei
+         * @returns String
+         */
+        this.dataLoad = function($imei)
+        {
+            return "**,imei:" +$imei+ ",116";
+        };
     };
-    
+
     module.exports = Comando;
 
 })(this);

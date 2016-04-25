@@ -31,7 +31,7 @@ var $objRedis = new $Redis();
 var $chave = $objRedis.criarChave('868683020094227');
 
 $objRedis.busca($chave, function($dados){
-    console.log($dados);
+    console.log($dados.ignicao);
 });
 
 //
