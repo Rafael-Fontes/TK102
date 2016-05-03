@@ -96,8 +96,8 @@
             return (new $Comando());
         };
 
-
-
+        //apagar
+        var xxx = 0;
 
         /*
          * Recebe as mensagens do modulo rastreador
@@ -106,7 +106,13 @@
         {
             $dados = $dados.toString().trim();
             console.log($dados);
-
+            
+            //apagar isso
+            getLogger().logger.warn({
+                message  : $dados,
+                dataHora : $moment().format("YYYY-MM-DD HH:mm:ss")
+            });             
+            
             var regexpNumeros = new RegExp("^[0-9]{10,}$");
             if($dados.indexOf("imei", 0) === -1 &&
                     regexpNumeros.test($dados.replace(";", "")) === false)
@@ -142,39 +148,47 @@
                 return;
             }
 
+
+            //apagar isso
+            if(xxx === 0)
+            {
+                //$cliente.write(new Buffer('**,imei:868683020094227,105,00005'));
+                //$cliente.write(new Buffer('**,imei:868683020094227,K'));
+                xxx++;
+                //console.log('Evoluir');
+            }
+
             if ($arrayDados && $arrayDados[4] && $arrayDados[4] === "F")
             {
                 var $dadosGps = getDadosGps($dados);
-                var ignicao   = estadoIgnicao($dadosGps.msg, $imei);
 
-                getAutenticar().login($imei, function($obj){
+                getAutenticar().login($imei, function($obj)
+                {
                     if($obj.length === 0){
                         $cliente.end();
                         return;
                     }
 
-                    //$cliente.write(new Buffer(getComando().dataLoad()));
-                    //interpretarMessagem($dadosGps.msg, $dadosGps.imei);
+                   estadoIgnicao($dadosGps.msg, $imei, function($dados)
+                   {
+                        var $objBd = {
+                            id_modulo         : $obj.id,
+                            entrada1          : $dadosGps.msg,
+                            datahora          : $moment($dadosGps.data).format("YYYY-MM-DD HH:mm:ss"),
+                            latitude          : $dadosGps.lat,
+                            longitude         : $dadosGps.lng,
+                            velocidade        : $dadosGps.velocidade,
+                            datahora_gravacao : $dadosGps.criado,
+                            panico            : ($dadosGps.msg === 'help me') ? 1 : 0,
+                            ignicao           : $dados
+                        };
 
-
-                    var $objBd = {
-                        id_modulo         : $obj.id,
-                        entrada1          : $dadosGps.msg,
-                        datahora          : $moment($dadosGps.data).format("YYYY-MM-DD HH:mm:ss"),
-                        latitude          : $dadosGps.lat,
-                        longitude         : $dadosGps.lng,
-                        velocidade        : $dadosGps.velocidade,
-                        datahora_gravacao : $dadosGps.criado,
-                        panico            : ($dadosGps.msg === 'help me') ? 1 : 0,
-                        ignicao           : ignicao
-                    };
-
-                    getBancoDados().salvar($objBd);
-                    console.log($objBd);
+                        getBancoDados().salvar($objBd);
+                        console.log($objBd);
+                   });
 
                 });
             }
-
         };
 
 
@@ -305,42 +319,46 @@
 
         /**
          *
-         * @param  {String} $mensagem
-         * @param  {Int}    $imei
-         * @return {Int}    $imei
+         * @param  {String}   $mensagem
+         * @param  {Function} $callback
+         * @param  {Int}      $imei
+         * @return {Int}
          */
-        var estadoIgnicao = function($mensagem, $imei)
+        var estadoIgnicao = function($mensagem, $imei, $callback)
         {
             var $chave = getRedis().criarChave($imei);
 
-            if($mensagem === 'acc on' || 'acc off')
+            if($mensagem === 'acc on' || $mensagem === 'acc off')
             {
                 var ign = ($mensagem === 'acc on') ? 1 : 0;
                 getRedis().busca($chave, function ($dados)
                 {
                     $dados.ignicao = ign;
                     getRedis().salvar($chave, $dados);
+                    $callback($dados.ignicao);
                 });
-            };
-
-            getRedis().busca($chave, function($dados)
+            }
+            else
             {
-                if($dados.ignicao === '0' || $dados.ignicao === '1')
-                { console.log("=================== 0001");
-                    return $dados.ignicao;
-                }
-                else
+                getRedis().busca($chave, function($dados)
                 {
-                    getLogger().logger.error({
-                        message  : 'Valor retornado pelo metodo estadoIgnicao() é diferente do esperado',
-                        dataHora : $moment().format("YYYY-MM-DD HH:mm:ss")
-                    });
-                    
-                    return 0;
-                }
-                
-                console.log("=================== 0002");
-            });
+                    if($dados.ignicao === '0' || $dados.ignicao === '1')
+                    {
+                        $callback($dados.ignicao);
+                        return;
+                    }
+                    else
+                    {
+                        getLogger().logger.error({
+                            message  : 'Valor retornado pelo metodo estadoIgnicao() é diferente do esperado',
+                            dataHora : $moment().format("YYYY-MM-DD HH:mm:ss")
+                        });
+
+                        $callback('0');
+                        return;
+                    }
+                });
+            }
         };
 
 

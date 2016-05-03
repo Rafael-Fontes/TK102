@@ -69,13 +69,28 @@
 
 
         /**
+         * Comando força o envio de posições armazenadas no micro SD do rastreador
          * @param   {Int}    $imei
          * @returns String
          */
         this.dataLoad = function($imei)
         {
-            return "**,imei:" +$imei+ ",116";
+            return "**,imei:868683020094227,116,20160429";
         };
+        
+        
+        
+        
+        
+        /**
+         * Comando resposavel por cacelar o alerta de panico "help me"
+         * @param   {Int}    $imei
+         * @returns String
+         */
+//        this.cancelarAlarmeSOS = function($imei)
+//        {
+//            return "nosos";
+//        };
     };
 
     module.exports = Comando;

@@ -30,11 +30,18 @@ var $Redis = require('./app/lib/Redis');
 var $objRedis = new $Redis();
 var $chave = $objRedis.criarChave('868683020094227');
 
-$objRedis.busca($chave, function($dados){
-    console.log($dados.ignicao);
+$objRedis.busca($chave, function($dados)
+{
+    $dados.ignicao = 1;
+    $objRedis.salvar($chave, $dados);
+    console.log($dados);
 });
 
-//
+
+
+
+
+
 //var $DB = require('./app/lib/BancoDados');
 //
 //var $obj = new $DB();

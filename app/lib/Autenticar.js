@@ -81,9 +81,11 @@
 
                         getRedis().salvar($chave, $obj);
                         $retorno($obj);
+                        return;
                     });
                 }
 
+                console.log('Classe autenticar');
                 console.log($dados);
                 $retorno($dados);
             });
